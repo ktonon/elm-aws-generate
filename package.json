@@ -1,45 +1,47 @@
 {
-  "name": "aws-sdk-elm",
-  "version": "0.0.2",
-  "description": "WIP -- AWS SDK for elm",
-  "main": "index.js",
+  "name": "elm-aws-generate",
+  "version": "0.0.1",
+  "description": "Generate an Elm interface to an AWS service.",
+  "main": "src/index.js",
+  "bin": {
+    "elm-aws-generate": "bin/elm-aws-generate.js"
+  },
   "scripts": {
-    "clean": "rm -rf src/AWS/Services/*.elm",
-    "build:gen": "node scripts/generate-sdk.js",
-    "build:docs": "elm package install -y && elm make --docs=docs.json",
-    "build": "npm run clean && npm run build:gen && npm run build:docs",
-    "prepublish": "elm format src/AWS/Services --yes",
-    "test": "npm run build && elm test",
+    "test": "echo Nothing yet",
     "posttest": "eslint ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ktonon/aws-sdk-elm.git"
+    "url": "git+https://github.com/ktonon/elm-aws-generate.git"
   },
   "keywords": [
     "aws",
-    "sdk",
-    "elm"
+    "elm",
+    "code-generation"
   ],
   "author": "Kevin Tonon <kevin@betweenconcepts.com>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/ktonon/aws-sdk-elm/issues"
+    "url": "https://github.com/ktonon/elm-aws-generate/issues"
   },
-  "homepage": "https://github.com/ktonon/aws-sdk-elm#readme",
+  "homepage": "https://github.com/ktonon/elm-aws-generate#readme",
   "dependencies": {
-    "aws-sdk": "^2.9.0"
+    "adm-zip": "^0.4.7",
+    "camelize": "^1.0.0",
+    "co": "^4.6.0",
+    "dot": "^1.1.1",
+    "fuzzy": "^0.1.3",
+    "superagent": "^3.6.0",
+    "superagent-as-promised": "^4.0.0",
+    "superagent-binary-parser": "^1.0.1",
+    "yargs": "^8.0.2"
   },
   "devDependencies": {
-    "camelize": "^1.0.0",
-    "dot": "^1.1.1",
     "elm": "^0.18.0",
-    "elm-test": "0.18.7",
     "eslint": "^3.15.0",
     "eslint-config-airbnb": "^14.0.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^3.0.2",
-    "eslint-plugin-react": "^6.9.0",
-    "fuzzy": "^0.1.3"
+    "eslint-plugin-react": "^6.9.0"
   }
 }
