@@ -5,7 +5,7 @@
         {{? m.required }}
         |> (::) ("{{= m.rawKey }}", data.{{= m.key }} |> ({{= m.value.jsonEncoder }}))
         {{?? true }}
-        |> AWS.Encode.optionalMember
+        |> AWS.Core.Encode.optionalMember
             ({{= m.value.jsonEncoder }})
             ("{{= m.rawKey }}", data.{{= m.key }})
         {{?}}

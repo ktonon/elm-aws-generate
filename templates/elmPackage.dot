@@ -1,15 +1,15 @@
 {
     "version": "1.0.0",
-    "summary": "AWS SDK for elm",
-    "repository": "https://github.com/ktonon/aws-sdk-elm.git",
+    "summary": "{{= it.serviceFullName }} ({{= it.mod }})",
+    "repository": "https://github.com/ktonon/elm-aws-{{= it.mod.toLowerCase() }}.git",
     "license": "Apache-2.0",
     "source-directories": [
+        "../elm-aws-core/src",
+        "../../elm-aws-core/src",
         "src"
     ],
     "exposed-modules": [
-        "AWS.Enum",{{~ it :source }}
-        "AWS.Services.{{= source.mod }}",{{~}}
-        "AWS"
+        "AWS.{{= it.mod }}"
     ],
     "dependencies": {
         "Bogdanp/elm-querystring": "1.0.0 <= v < 2.0.0",

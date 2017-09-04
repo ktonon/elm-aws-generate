@@ -5,12 +5,12 @@ const fs = require('fs');
 const path = require('path');
 require('superagent-as-promised')(request);
 
-function* downloadApi({ serviceName, outputDir, refresh } = {}) {
-  const apiPattern = new RegExp(`/(${serviceName}-.*?\\.json)$`, 'i');
-  const outputDirExists = fs.existsSync(outputDir);
+function* download(serviceName, { root = 'api', refresh } = {}) {
+  const apiPattern = (name = '[^/]+?') => new RegExp(`/(${name}-.*?\\.json)$`, 'i');
+  const rootExists = fs.existsSync(root);
 
-  const existingJsonFiles = (outputDirExists ? fs.readdirSync(outputDir) : [])
-    .filter(name => apiPattern.test(`/${name}`));
+  const existingJsonFiles = (rootExists ? fs.readdirSync(root) : [])
+    .filter(name => apiPattern(serviceName).test(`/${name}`));
 
   if (existingJsonFiles.length > 0 && !refresh) {
     return;
@@ -29,22 +29,22 @@ function* downloadApi({ serviceName, outputDir, refresh } = {}) {
     .buffer()
     .endAsync();
 
-  console.log(`Extracting ${serviceName} to ${outputDir}...`);
+  console.log(`Extracting JSON API files to ${root}...`);
   const zip = new AdmZip(body);
 
-  if (!outputDirExists) {
-    fs.mkdirSync(outputDir);
+  if (!rootExists) {
+    fs.mkdirSync(root);
   }
-  existingJsonFiles.forEach(name => fs.unlinkSync(path.join(outputDir, name)));
+  existingJsonFiles.forEach(name => fs.unlinkSync(path.join(root, name)));
 
   zip
     .getEntries()
     .forEach((e) => {
-      const match = e.entryName.match(apiPattern);
+      const match = e.entryName.match(apiPattern());
       if (match) {
-        fs.writeFileSync(`${outputDir}/${match[1]}`, e.getData().toString('utf8'));
+        fs.writeFileSync(`${root}/${match[1]}`, e.getData().toString('utf8'));
       }
     });
 }
 
-module.exports = downloadApi;
+module.exports = download;

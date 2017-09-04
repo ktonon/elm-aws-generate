@@ -6,8 +6,8 @@ const toString = (param) => {
   if (param.value.enum) {
     return {
       key: param.key,
-      value: `(AWS.Enum.toString ${param.key} |> Result.withDefault "")`,
-      extraImport: 'import AWS.Enum',
+      value: `(AWS.Core.Enum.toString ${param.key} |> Result.withDefault "")`,
+      extraImport: 'import AWS.Core.Enum',
     };
   } else if (param.value.type === 'String') {
     return {

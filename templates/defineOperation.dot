@@ -14,7 +14,7 @@ __Required Parameters__
   {{? it.optionalParams.length }}
     ( {{= it.optionsName }} -> {{= it.optionsName }} ) ->
   {{?}}
-    AWS.Request (AWS.Response {{= it.output.type }})
+    AWS.Core.Http.Request (AWS.Core.Http.Response {{= it.output.type }})
 
 {{= it.name }} {{~ it.requiredParams :p }}{{= p.key }} {{~}}{{? it.optionalParams.length }}setOptions {{?}}=
     {{? it.input }}
@@ -28,9 +28,8 @@ __Required Parameters__
         {{?}}
     in
     {{?}}
-        AWS.Http.unsignedRequest
-            "{{= it.actionName }}"
-            "{{= it.http.method }}"
+        AWS.Core.Http.request
+            AWS.Core.Http.{{= it.http.method }}
             {{= it.requestPath }}
 
             {{? it.protocol === 'query' }}
@@ -46,21 +45,20 @@ __Required Parameters__
             {{? it.protocol === 'json' && it.input }}
             (requestInput
                 |> {{= it.input.jsonEncoder }}
-                |> AWS.Http.JsonBody
+                |> AWS.Core.Http.jsonBody
             )
             {{?? true }}
-            AWS.Http.NoBody
+            AWS.Core.Http.emptyBody
             {{?}}
 
-            (AWS.Decode.responseWrapperDecoder
+            (AWS.Core.Decode.responseWrapperDecoder
                 "{{= it.actionName }}"
                 {{? it.outputResultWrapper === "()" }}
-                (AWS.Decode.FixedResult ())
+                (AWS.Core.Decode.FixedResult ())
                 {{?? true }}
-                (AWS.Decode.ResultDecoder "{{= it.outputResultWrapper }}" {{= it.output.decoder }})
+                (AWS.Core.Decode.ResultDecoder "{{= it.outputResultWrapper }}" {{= it.output.decoder }})
                 {{?}}
             )
-            |> AWS.UnsignedRequest
 
 
 {{? it.optionalParams.length }}

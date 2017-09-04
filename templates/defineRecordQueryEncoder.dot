@@ -9,7 +9,7 @@
             Just value ->
                 {{= m.value.queryEncoder(m.rawKey) }} value
             Nothing ->
-                AWS.Encode.unchangedQueryArgs
+                AWS.Core.Encode.unchangedQueryArgs
         )
         {{?}}
         {{~}}

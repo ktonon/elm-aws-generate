@@ -2,7 +2,7 @@
 {{= it.decoder }} =
     JDP.decode {{= it.type }}
         {{~ it.members :m }}
-        |> JDP.custom (AWS.Decode.{{= m.required ? 'required' : 'optional' }}
+        |> JDP.custom (AWS.Core.Decode.{{= m.required ? 'required' : 'optional' }}
             ["{{= m.decodeKeys.join('", "') }}"]
             {{= m.value.decoder }}
         )

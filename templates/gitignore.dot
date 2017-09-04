@@ -1,6 +1,4 @@
-apis/
+api/
 elm-stuff/
 node_modules/
-sandbox/
 docs.json
-*.log

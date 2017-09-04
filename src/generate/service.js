@@ -1,13 +1,6 @@
-const fs = require('fs');
-const sysPath = require('path');
-const dots = require('./util/dots');
-const moduleName = require('./util/module-name');
-const replacePathParams = require('./util/replace-path-params');
-const resolveTypes = require('./util/resolve-types');
-const { lowCam, upCam } = require('./util/case-conversions');
-const { unique } = require('./util/set');
-
-const outRoot = sysPath.resolve(`${__dirname}/../src/AWS/Services`);
+const { lowCam, upCam, moduleName, unique } = require('../util');
+const replacePathParams = require('../replace-path-params');
+const resolveTypes = require('../resolve-types');
 
 const findIOShapes = (ops, io) =>
   Object.keys(ops).map((key) => {
@@ -15,12 +8,13 @@ const findIOShapes = (ops, io) =>
     return op[io] && upCam(op[io].shape);
   }).filter(x => x);
 
-module.exports = (data) => {
+module.exports = ({ dots, generate }) => (data) => {
   const types = resolveTypes(data.shapes, {
     inputShapes: findIOShapes(data.operations, 'input'),
     outputShapes: findIOShapes(data.operations, 'output'),
   });
   const mod = moduleName(data.metadata);
+  console.log(`Generating ${mod}...`);
 
   const sumExtraImports = types.reduce((acc, t) => acc.concat(t.extraImports || []), []);
 
@@ -75,11 +69,10 @@ module.exports = (data) => {
     types: types.filter(t => t.category === key),
   })).filter(c => c.types.length > 0);
 
-  const context = {
+  const it = {
     categories,
     documentation: data.documentation,
     extraImports: unique(sumExtraImports),
-    isRegional: !data.metadata.globalEndpoint,
     metadata: data.metadata,
     mod,
     operationNames: operations.reduce((acc, op) =>
@@ -89,13 +82,9 @@ module.exports = (data) => {
       []),
     operations: operations.map(dots.defineOperation),
     signatureVersion: `${upCam(data.metadata.signatureVersion)}Signature`,
+    serviceDefinition: generate.serviceDefinition(data.metadata),
     types,
   };
 
-  fs.writeFileSync(
-    `${outRoot}/${mod}.elm`,
-    dots.api(context),
-    'utf8');
-
-  return context;
+  return dots.api(it);
 };
