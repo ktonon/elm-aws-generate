@@ -8,5 +8,6 @@ dependencies:
     - node_modules
     - elm-stuff
   override:
+    - git submodule update --init
     - npm install
     - ./scripts/ci-elm-hack.sh

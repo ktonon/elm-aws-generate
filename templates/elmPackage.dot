@@ -5,7 +5,6 @@
     "license": "Apache-2.0",
     "source-directories": [
         "../elm-aws-core/src",
-        "../../elm-aws-core/src",
         "src"
     ],
     "exposed-modules": [
