@@ -48,7 +48,6 @@ const issue = 'Please open an issue on https://github.com/ktonon/elm-aws-generat
 co(function* () {
   yield sourceApi.download(name, { root, refresh });
   const source = sourceApi.findLatest(name, { root });
-  const { protocol, signatureVersion } = source.metadata;
 
   if (!source) {
     console.error(`Could not find source JSON file for "${name}".
@@ -57,6 +56,8 @@ If that does not help, make sure a service exists with the given name.
 See https://github.com/aws/aws-sdk-js/tree/master/apis for available services.`);
     process.exit(1);
   }
+
+  const { protocol, signatureVersion } = source.metadata;
 
   if (source.version !== '2.0') {
     console.error(`Unsupported source version: ${source.version}.\n${issue}`);
